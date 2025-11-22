@@ -8,7 +8,7 @@ function calculateSimpleRevenue(purchase, _product) {
   const { discount, sale_price, quantity } = purchase;
   const discountMultiplier = 1 - purchase.discount / 100;
   const revenue = purchase.sale_price * purchase.quantity * discountMultiplier;
-  return +revenue.toFixed(2);
+  return revenue;
 }
 
 function calculateSimpleProfit(purchase, _product) {
@@ -27,8 +27,7 @@ function calculateSimpleProfit(purchase, _product) {
  * @returns {number}
  */
 function calculateBonusByProfit(index, total, seller) {
-    const { profit } = seller.profit;
-  
+  const profit = seller.profit;
   let percent = 0;
   if (index === 0) percent = 0.15;
   else if (index === 1 || index === 2) percent = 0.1;
@@ -119,9 +118,9 @@ function analyzeSalesData(data, options) {
     seller_id: seller.id,
     name: seller.name,
     revenue: +seller.revenue.toFixed(2),
-    profit: +seller.profit.toFixed(2),
+    profit: seller.profit,
     sales_count: seller.sales_count,
     top_products: seller.top_products,
-    bonus: +seller.bonus.toFixed(2),
+    bonus: seller.bonus
   }));
 }
