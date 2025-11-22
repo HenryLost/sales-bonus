@@ -5,18 +5,10 @@
  * @returns {number}
  */
 function calculateSimpleRevenue(purchase, _product) {
-  const { discount, sale_price, quantity } = purchase;
+  const { discount, sale_price, quantity = 0} = purchase;
   const discountMultiplier = 1 - purchase.discount / 100;
-  const revenue = +(purchase.sale_price * purchase.quantity * discountMultiplier).toFixed(2);
-  return revenue;
-}
-
-function calculateSimpleProfit(purchase, _product) {
-  const { discount, sale_price, quantity = 0 } = purchase;
-  return (
-    sale_price * (1 - discount / 100) * quantity -
-    _product.purchase_price * quantity
-  );
+  const revenue = purchase.sale_price * purchase.quantity * discountMultiplier;
+  return +revenue.toFixed(2);
 }
 
 /**
@@ -29,10 +21,15 @@ function calculateSimpleProfit(purchase, _product) {
 function calculateBonusByProfit(index, total, seller) {
   const profit = seller.profit;
   let percent = 0;
-  if (index === 0) percent = 0.15;
-  else if (index === 1 || index === 2) percent = 0.1;
-  else if (index === total - 1) percent = 0;
-  else percent = 0.05;
+  if (index === 0) {
+    percent = 0.15;
+  }else if (index === 1 || index === 2) {
+    percent = 0.1;
+  }else if (index === total - 1) {
+    percent = 0;
+  }else {
+    percent = 0.05;
+  }
   return Math.floor(profit * percent * 100) / 100;
 }
 
@@ -86,7 +83,7 @@ function analyzeSalesData(data, options) {
 
       const revenue = calculateRevenue(item, product);
 
-      const cost = (product.purchase_price * item.quantity);
+      const cost = product.purchase_price * item.quantity;
 
       const profitItem = revenue - cost;
 
@@ -101,7 +98,7 @@ function analyzeSalesData(data, options) {
 
   sellerStats.forEach((seller) => {
     seller.profit = +seller.profit.toFixed(2);
-  });
+  })  
 
   sellerStats.sort((a, b) => b.profit - a.profit);
 
@@ -118,7 +115,7 @@ function analyzeSalesData(data, options) {
     seller_id: seller.id,
     name: seller.name,
     revenue: +seller.revenue.toFixed(2),
-    profit: +seller.profit.toFixed(2),
+    profit: seller.profit,
     sales_count: seller.sales_count,
     top_products: seller.top_products,
     bonus: +seller.bonus.toFixed(2)
