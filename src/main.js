@@ -56,9 +56,7 @@ function analyzeSalesData(data, options) {
     throw new Error("Некорректные входные данные");
   }
   
-  const sellerStats = data.sellers.map((seller) => ([
-    seller.id,
-    {
+  const sellerStats = data.sellers.map((seller) => ({
     id: seller.id,
     name: `${seller.first_name} ${seller.last_name}`,
     revenue: 0,
@@ -66,7 +64,7 @@ function analyzeSalesData(data, options) {
     sales_count: 0,
     products_sold: {},
   }
-]));
+));
 
   const sellerIndex = Object.fromEntries(
     sellerStats.map((seller) => [seller.id, seller])
@@ -123,6 +121,6 @@ function analyzeSalesData(data, options) {
     profit: +seller.profit.toFixed(2),
     sales_count: seller.sales_count,
     top_products: seller.top_products,
-    bonus: +seller.bonus.toFixed(2),
+    bonus: seller.bonus.toFixed(2),
   }));
 }
