@@ -52,14 +52,7 @@ function analyzeSalesData(data, options) {
   ) {
     throw new Error("Некорректные входные данные");
   }
-  if (
-    !options ||
-    typeof options.calculateRevenue !== "function" ||
-    typeof options.calculateBonus !== "function"
-  ) {
-    throw new Error("Некорректные опции");
-  }
-
+  
   const sellerStats = data.sellers.map((seller) => ({
     id: seller.id,
     name: `${seller.first_name} ${seller.last_name}`,
