@@ -30,7 +30,7 @@ function calculateBonusByProfit(index, total, seller) {
   }else {
     percent = 0.05;
   }
-  return Math.floor(profit * percent * 100) / 100;
+  return profit * percent * 100 / 100;
 }
 
 /**
@@ -114,6 +114,6 @@ function analyzeSalesData(data, options) {
     profit: +seller.profit.toFixed(2),
     sales_count: seller.sales_count,
     top_products: seller.top_products,
-    bonus: seller.bonus
+    bonus: +seller.bonus.toFixed(2)
   }));
 }
