@@ -5,10 +5,10 @@
  * @returns {number}
  */
 function calculateSimpleRevenue(purchase, _product) {
-  const { discount, sale_price, quantity = 0} = purchase;
-  const discountMultiplier = 1 - purchase.discount / 100;
-  const revenue = purchase.sale_price * purchase.quantity * discountMultiplier;
-  return +revenue.toFixed(2);
+  const { discount, sale_price, quantity} = purchase;
+  const discountMultiplier = 1 - (purchase.discount / 100); 
+  const revenue = sale_price * quantity * discountMultiplier;
+  return revenue;
 }
 
 /**
@@ -87,23 +87,19 @@ function analyzeSalesData(data, options) {
 
       const profitItem = revenue - cost;
 
-      seller.revenue += revenue;
+      seller.revenue += +revenue.toFixed(2);
 
       seller.profit += profitItem;
 
       seller.products_sold[item.sku] =
         (seller.products_sold[item.sku] || 0) + item.quantity;
     });
-  });
+  });  
 
-  sellerStats.forEach((seller) => {
-    seller.profit = +seller.profit.toFixed(2);
-  })  
+  sellerStats.sort((a, b) => b.profit - a.profit);  
 
-  sellerStats.sort((a, b) => b.profit - a.profit);
-
-  sellerStats.forEach((seller, ID) => {
-    seller.bonus = calculateBonus(ID, sellerStats.length, seller);
+  sellerStats.forEach((seller, index) => {
+    seller.bonus = calculateBonus(index, sellerStats.length, seller);
 
     seller.top_products = Object.entries(seller.products_sold)
       .map(([sku, quantity]) => ({ sku, quantity }))
@@ -115,9 +111,9 @@ function analyzeSalesData(data, options) {
     seller_id: seller.id,
     name: seller.name,
     revenue: +seller.revenue.toFixed(2),
-    profit: seller.profit,
+    profit: +seller.profit.toFixed(2),
     sales_count: seller.sales_count,
     top_products: seller.top_products,
-    bonus: +seller.bonus.toFixed(2)
+    bonus: seller.bonus
   }));
 }
